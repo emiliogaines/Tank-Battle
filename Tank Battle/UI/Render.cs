@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Tank_Battle.Object;
 
 namespace Tank_Battle.UI
 {
     public static class Render
     {
-        readonly static int consoleWidth = 64; //Lines, not pixels
-        readonly static int consoleHeight = 32; //Lines, not pixels
+        readonly static int ConsoleWidth = 64; //Lines, not pixels
+        readonly static int ConsoleHeight = 20; //Lines, not pixels
         public static void Initialize()
         {
-            
-            Console.WindowWidth = Math.Clamp(consoleWidth, 0, Console.LargestWindowWidth);
-            Console.WindowHeight = Math.Clamp(consoleHeight, 0, Console.LargestWindowHeight);
-            Console.BufferWidth = Math.Clamp(consoleWidth, 0, Console.LargestWindowWidth);
-            Console.BufferHeight = Math.Clamp(consoleHeight, 0, Console.LargestWindowHeight);
-            Console.WindowWidth = Math.Clamp(consoleWidth, 0, Console.LargestWindowWidth);
-            Console.WindowHeight = Math.Clamp(consoleHeight, 0, Console.LargestWindowHeight);
+
+            Console.WindowWidth = Math.Clamp(ConsoleWidth, 0, Console.LargestWindowWidth);
+            Console.WindowHeight = Math.Clamp(ConsoleHeight, 0, Console.LargestWindowHeight);
+            Console.BufferWidth = Math.Clamp(ConsoleWidth, 0, Console.LargestWindowWidth);
+            Console.BufferHeight = Math.Clamp(ConsoleHeight, 0, Console.LargestWindowHeight);
+            Console.WindowWidth = Math.Clamp(ConsoleWidth, 0, Console.LargestWindowWidth);
+            Console.WindowHeight = Math.Clamp(ConsoleHeight, 0, Console.LargestWindowHeight);
 
 
 
@@ -33,9 +34,9 @@ namespace Tank_Battle.UI
             Console.Clear();
         }
 
-        public static void DrawBorder(string title = "", string subtitle = "")
+        public static void DrawBorder(string Title)
         {
-            title = ' ' + title.Trim() + ' ';
+            Title = ' ' + Title.Trim() + ' ';
             for (int i = 0; i < Console.WindowWidth; i++)
             {
                 Console.SetCursorPosition(i, 0);
@@ -61,83 +62,117 @@ namespace Tank_Battle.UI
             Console.SetCursorPosition(Console.WindowWidth - 1, Console.WindowHeight - 1);
             Console.Write((char)ConsoleChar.CornerBottomRight);
 
-            if (title.Length > 0)
+            if (Title.Length > 0)
             {
-                int startTextIndex = (Console.WindowWidth / 2) - (title.Length / 2);
-                Console.SetCursorPosition(startTextIndex, 1);
-                Console.Write(title);
+                int StartTextIndex = (Console.WindowWidth / 2) - (Title.Length / 2);
+                Console.SetCursorPosition(StartTextIndex, 1);
+                Console.Write(Title);
 
-                Console.SetCursorPosition(startTextIndex - 1, 0);
+                Console.SetCursorPosition(StartTextIndex - 1, 0);
                 Console.Write((char)ConsoleChar.WallThreewayDown);
-                Console.SetCursorPosition(startTextIndex - 1, 1);
+                Console.SetCursorPosition(StartTextIndex - 1, 1);
                 Console.Write((char)ConsoleChar.WallVertical);
-                Console.SetCursorPosition(startTextIndex - 1, 2);
+                Console.SetCursorPosition(StartTextIndex - 1, 2);
                 Console.Write((char)ConsoleChar.CornerBottomLeft);
 
-                Console.SetCursorPosition(startTextIndex + title.Length, 0);
+                Console.SetCursorPosition(StartTextIndex + Title.Length, 0);
                 Console.Write((char)ConsoleChar.WallThreewayDown);
-                Console.SetCursorPosition(startTextIndex + title.Length, 1);
+                Console.SetCursorPosition(StartTextIndex + Title.Length, 1);
                 Console.Write((char)ConsoleChar.WallVertical);
-                Console.SetCursorPosition(startTextIndex + title.Length, 2);
+                Console.SetCursorPosition(StartTextIndex + Title.Length, 2);
                 Console.Write((char)ConsoleChar.CornerBottomRight);
 
-                for (int i = 0; i < title.Length; i++)
+                for (int i = 0; i < Title.Length; i++)
                 {
-                    Console.SetCursorPosition(startTextIndex + i, 2);
+                    Console.SetCursorPosition(StartTextIndex + i, 2);
                     Console.Write((char)ConsoleChar.WallHorizontal);
-                    Console.SetCursorPosition(startTextIndex + i, 0);
+                    Console.SetCursorPosition(StartTextIndex + i, 0);
                     Console.Write((char)ConsoleChar.WallHorizontal);
                 }
             }
 
-            if (subtitle.Length > 0)
+        }
+
+        public static void DisplayMessage(string Message, bool Permanent = false)
+        {
+            if (Permanent)
             {
                 Console.SetCursorPosition(0, Console.WindowHeight - 3);
                 Console.Write((char)ConsoleChar.WallVerticalLeftThreeWay);
                 Console.SetCursorPosition(Console.WindowWidth - 1, Console.WindowHeight - 3);
                 Console.Write((char)ConsoleChar.WallVerticalRightThreeWay);
-                for (int i = 1; i < Console.WindowWidth - 1; i++)
+                for (int j = 1; j < Console.WindowWidth - 1; j++)
                 {
-                    Console.SetCursorPosition(i, Console.WindowHeight - 3);
+                    Console.SetCursorPosition(j, Console.WindowHeight - 3);
                     Console.Write((char)ConsoleChar.WallHorizontal);
                 }
 
-                Console.SetCursorPosition((Console.WindowWidth / 2) - (subtitle.Length / 2), Console.WindowHeight - 2);
-                Console.Write(subtitle);
+                Console.SetCursorPosition((Console.WindowWidth / 2) - (Message.Length / 2), Console.WindowHeight - 2);
+                Console.Write(Message);
+            }
+            else
+            {
+                ConsoleColor[] Colors = new ConsoleColor[] { ConsoleColor.Black, ConsoleColor.DarkGray, ConsoleColor.Yellow };
+                for (int i = 0; i < Colors.Length; i++)
+                {
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.SetCursorPosition(0, Console.WindowHeight - 3);
+                    Console.Write((char)ConsoleChar.WallVerticalLeftThreeWay);
+                    Console.SetCursorPosition(Console.WindowWidth - 1, Console.WindowHeight - 3);
+                    Console.Write((char)ConsoleChar.WallVerticalRightThreeWay);
+                    for (int j = 1; j < Console.WindowWidth - 1; j++)
+                    {
+                        Console.SetCursorPosition(j, Console.WindowHeight - 3);
+                        Console.Write((char)ConsoleChar.WallHorizontal);
+                    }
+
+                    Console.SetCursorPosition((Console.WindowWidth / 2) - (Message.Length / 2), Console.WindowHeight - 2);
+                    Console.ForegroundColor = Colors[i];
+                    Console.Write(Message);
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    if (i == 0)
+                    {
+                        Thread.Sleep(2000);
+                    }
+                    else
+                    {
+                        Thread.Sleep(250);
+                    }
+                }
             }
         }
 
-        public static void DrawOptions(Option[] options, Action<int> callback)
+        public static void DrawOptions(Option[] Options, Action<int> Callback)
         {
             while (Console.KeyAvailable) Console.ReadKey(true);
-            int indexX = 3; //Padding to not interfere with borders
-            int indexY = 15; //Padding to not interfere with borders and avoid tanks
-            int maxIndexX = Console.WindowWidth - 2;
-            int maxIndexY = Console.WindowHeight - 5;
+            int IndexX = 3; //Padding to not interfere with borders
+            int IndexY = 11; //Padding to not interfere with borders and avoid tanks
+            int MaxIndexX = Console.WindowWidth - 2;
+            int MaxIndexY = Console.WindowHeight - 3;
 
-            int padding = 2;
-            foreach (var option in options)
+            int Padding = 2;
+            foreach (var Option in Options)
             {
-                int positionX = Math.Clamp(option.x, indexX, maxIndexX);
-                int positionY = Math.Clamp(option.y, indexY, maxIndexY);
-                option.SetRealPosition(positionX, positionY);
+                int PositionX = Math.Clamp(Option.X, IndexX, MaxIndexX);
+                int PositionY = Math.Clamp(Option.Y, IndexY, MaxIndexY);
+                Option.SetRealPosition(PositionX, PositionY);
 
-                Console.SetCursorPosition(positionX, positionY);
-                if (options[0] == option)
+                Console.SetCursorPosition(PositionX, PositionY);
+                if (Options[0] == Option)
                 {
-                    Console.Write("> " + option.title);
+                    Console.Write("> " + Option.Title);
                 }
                 else
                 {
-                    Console.Write(option.title);
+                    Console.Write(Option.Title);
                 }
 
 
-                indexY += padding; // Space out options
+                IndexY += Padding; // Space out options
             }
 
-            int selectedIndex = 0;
-            if (options.Length > 0)
+            int SelectedIndex = 0;
+            if (Options.Length > 0)
             {
                 while (Console.KeyAvailable) Console.ReadKey(true);
                 while (true)
@@ -146,63 +181,80 @@ namespace Tank_Battle.UI
                     if (key.Key == ConsoleKey.Enter) break;
                     if (key.Key == ConsoleKey.UpArrow)
                     {
-                        if (selectedIndex > 0)
+                        if (SelectedIndex > 0)
                         {
-                            selectedIndex--;
-                            foreach (var option in options)
+                            SelectedIndex--;
+                            foreach (var Option in Options)
                             {
-                                Console.SetCursorPosition(1, option.realPositionY);
+                                Console.SetCursorPosition(1, Option.RealPositionY);
                                 Console.Write(new string(' ', Console.WindowWidth - 2));
-                                Console.SetCursorPosition(option.realPositionX, option.realPositionY);
-                                if (options[selectedIndex] == option)
+                                Console.SetCursorPosition(Option.RealPositionX, Option.RealPositionY);
+                                if (Options[SelectedIndex] == Option)
                                 {
-                                    Console.Write("> " + option.title);
+                                    Console.Write("> " + Option.Title);
                                 }
                                 else
                                 {
-                                    Console.Write(option.title);
+                                    Console.Write(Option.Title);
                                 }
                             }
                         }
                     }
                     if (key.Key == ConsoleKey.DownArrow)
                     {
-                        if (selectedIndex < options.Length - 1)
+                        if (SelectedIndex < Options.Length - 1)
                         {
-                            selectedIndex++;
-                            foreach (var option in options)
+                            SelectedIndex++;
+                            foreach (var Option in Options)
                             {
-                                Console.SetCursorPosition(1, option.realPositionY);
+                                Console.SetCursorPosition(1, Option.RealPositionY);
                                 Console.Write(new string(' ', Console.WindowWidth - 2));
-                                Console.SetCursorPosition(option.realPositionX, option.realPositionY);
-                                if (options[selectedIndex] == option)
+                                Console.SetCursorPosition(Option.RealPositionX, Option.RealPositionY);
+                                if (Options[SelectedIndex] == Option)
                                 {
-                                    Console.Write("> " + option.title);
+                                    Console.Write("> " + Option.Title);
                                 }
                                 else
                                 {
-                                    Console.Write(option.title);
+                                    Console.Write(Option.Title);
                                 }
                             }
                         }
                     }
                 }
-                callback(selectedIndex);
+                Callback(SelectedIndex);
             }
         }
 
-        public static void DrawTank(TankFacingDirection direction, Tank tank)
+        public static void DrawTank(TankFacingDirection Direction, Tank Tank)
         {
-            int yLevel = 5;
-            int xLevel = (direction == TankFacingDirection.EAST) ? 3 : consoleWidth - 18; //Align Tank '3' from edge
+            int YLevel = 5;
+            int YLevelTank = 5;
+            int XLevel = (Direction == TankFacingDirection.EAST) ? 3 : ConsoleWidth - 18; //Align Tank '3' from edge
+            int XHealthLevel = (Direction == TankFacingDirection.EAST) ? 3 : ConsoleWidth - 15;
+            int XTextLevel = (Direction == TankFacingDirection.EAST) ? 3 : ConsoleWidth - 3 - (Tank.Driver.Name.Length);
 
 
-            string[] tankStringArray = GetTank(direction);
-            Console.SetCursorPosition(xLevel, yLevel);
-            foreach (string tankPart in tankStringArray)
+            string[] TankStringArray = GetTank(Direction);
+            if (Tank.Health == 0)
             {
-                Console.CursorLeft = xLevel;
-                Console.Write(tankPart);
+                TankStringArray = GetDestroyedTank();
+                YLevelTank = YLevelTank - 1;
+                XLevel = (Direction == TankFacingDirection.EAST) ? 1 : ConsoleWidth - 19;
+            }
+
+            Console.SetCursorPosition(XTextLevel, YLevel - 2);
+            Console.Write(Tank.Driver.Name);
+
+            string tankText = "[" + new string('=', Tank.Health) + new string(' ', Tank.MaxHealth - Tank.Health) + "]";
+            Console.SetCursorPosition(XHealthLevel, YLevel - 1);
+            Console.Write(tankText);
+
+            Console.SetCursorPosition(XLevel, YLevelTank);
+            foreach (string TankPart in TankStringArray)
+            {
+                Console.CursorLeft = XLevel;
+                Console.Write(TankPart);
                 Console.CursorTop++;
             }
         }
@@ -217,6 +269,7 @@ namespace Tank_Battle.UI
                     "/~~~~~~~~~\\",
                     "\\O.O.O.O.O/"
                 };
+
             }
             else
             {
@@ -227,6 +280,20 @@ namespace Tank_Battle.UI
                     "   \\O.O.O.O.O/"
                 };
             }
+        }
+
+        private static string[] GetDestroyedTank()
+        {
+            return new string[]
+               {
+                    " ,;,'.`,''.`.':.",
+                    ".'.` ; ;. `'` .``.",
+                    " ':,`:`.`:~..`.;'",
+                    "      :.:.|",
+                    "    `-|___:-'",
+                    "     _:..:|_",
+                    "__.=~'=___=`~=.__"
+               };
         }
     }
 

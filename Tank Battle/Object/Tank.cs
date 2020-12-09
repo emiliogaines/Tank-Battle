@@ -6,18 +6,36 @@ namespace Tank_Battle.Object
 {
     public class Tank
     {
-        public Driver driver;
-        public int health = 10;
-        public int firepower = 1;
+        public Driver Driver;
+        public int Health = 10;
+        public int Firepower = 1;
+        public int BaseFirepower = 1;
 
-        public void EnterTank(Driver driver)
+        public int MaxHealth = 10;
+
+        public void EnterTank(Driver Driver)
         {
-            this.driver = driver;
+            this.Driver = Driver;
         }
 
-        public void ShootAt(Tank tank)
+        public int ShootAt(Tank Tank)
         {
-            tank.health = Math.Clamp(tank.health - this.firepower, 0, int.MaxValue); 
+            Firepower = BaseFirepower + new Random().Next(0, 2);
+            int Damage = (Firepower + Driver.Firepower);
+            Tank.Health = Math.Clamp(Tank.Health - Damage, 0, int.MaxValue);
+            return Damage;
+        }
+
+        public Memento CaptureMemento()
+        {
+            return new Memento(Driver, Health, Firepower);
+        }
+
+        public void RestoreMemento(Memento Memento)
+        {
+            Driver = Memento.Driver;
+            Health = Memento.Health;
+            Firepower = Memento.Firepower;
         }
     }
 }
