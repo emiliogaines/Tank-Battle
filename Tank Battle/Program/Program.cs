@@ -28,8 +28,8 @@ namespace Tank_Battle
             var TankObservable = new Observable<Tank>();
 
             //Creates observer for each tank
-            var AllyTankObserver = new TankHealthObserver();
-            var EnemyTankObserver = new TankHealthObserver();
+            var AllyTankObserver = new TankObserver();
+            var EnemyTankObserver = new TankObserver();
 
             //Register Tanks to re-draw themselves when they are updated, eg. taking damage
             TankObservable.Register(AllyTankObserver);

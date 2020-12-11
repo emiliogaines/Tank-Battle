@@ -6,7 +6,7 @@ using Tank_Battle.UI;
 
 namespace Tank_Battle.Observable
 {
-    public class TankHealthObserver : IObserver<Tank>
+    public class TankObserver : IObserver<Tank>
     {
         public void Update(Tank Tank)
         {
