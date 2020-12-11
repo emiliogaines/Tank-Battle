@@ -8,10 +8,12 @@ namespace Tank_Battle
 {
     class Program
     {
-        static TankMemory TankMemory;
+        static Checkpoint Checkpoint;
         static Tank AllyTank, EnemyTank;
         static void Main(string[] args)
         {
+            //Init checkpoint
+            Checkpoint = new Checkpoint();
             //Init drivers
             Driver AllyDriver = new Driver("Mio");
             Driver EnemyDriver = new Driver("Klaus");
@@ -32,8 +34,7 @@ namespace Tank_Battle
             Render.DrawBorder("TANK BATTLE");
 
             //Draw our tanks
-            Render.DrawTank(TankFacingDirection.EAST, AllyTank);
-            Render.DrawTank(TankFacingDirection.WEST, EnemyTank);
+            Render.RenderTanks(AllyTank, EnemyTank);
 
             //Create and display options that the user can click on
             Option[] Options = new Option[]
@@ -67,7 +68,7 @@ namespace Tank_Battle
             }
             else
             {
-                Render.DisplayMessage(EnemyTank.Driver.Name + " WON!");
+                Render.DisplayMessage(EnemyTank.Driver.Name + " WON!", true);
             }
 
             while (true) { Console.ReadKey(); }
@@ -82,58 +83,34 @@ namespace Tank_Battle
                 case 0: // Attack
                     //Ally fire at enemy
                     int DamageDone = AllyTank.ShootAt(EnemyTank);
-                    RenderTanks();
+                    Render.RenderTanks(AllyTank, EnemyTank);
                     Render.DisplayMessage("You dealt " + DamageDone + " damage!");
 
                     if(EnemyTank.Health == 0) break;
 
                     //Enemy fires back
                     int DamageTaken = EnemyTank.ShootAt(AllyTank);
-                    RenderTanks();
+                    Render.RenderTanks(AllyTank, EnemyTank);
                     Render.DisplayMessage("You took " + DamageTaken + " damage!");
                     break;
                 case 1: // Save checkpoint
-                    SaveCheckpoint(AllyTank);
+                    Checkpoint.SaveCheckpoint(AllyTank);
+                    Render.RenderTanks(AllyTank, EnemyTank);
+                    Render.DisplayMessage("Saving ...");
                     break;
                 case 2: // Restore checkpoint
-                    RestoreCheckpoint(AllyTank);
+                    var ResultBoolean = Checkpoint.RestoreCheckpoint(AllyTank);
+                    Render.RenderTanks(AllyTank, EnemyTank);
+                    if (ResultBoolean)
+                    {
+                        Render.DisplayMessage("Restoring ...");
+                    }
+                    else
+                    {
+                        Render.DisplayMessage("NO CHECKPOINT FOUND!");
+                    }
                     break;
             }
         }
-
-        static void RenderTanks()
-        {
-            Render.DrawTank(TankFacingDirection.EAST, AllyTank);
-            Render.DrawTank(TankFacingDirection.WEST, EnemyTank);
-        }
-
-        static void SaveCheckpoint(Tank tank)
-        {
-            if(TankMemory == null)
-            {
-                TankMemory = new TankMemory();
-            }
-
-            TankMemory.Memento = tank.CaptureMemento();
-            RenderTanks();
-            Render.DisplayMessage("Saving ...");
-        }
-
-        static void RestoreCheckpoint(Tank Tank)
-        {
-            if(TankMemory != null)
-            {
-                Tank.RestoreMemento(TankMemory.Memento);
-                RenderTanks();
-                Render.DisplayMessage("Restoring ...");
-            }
-            else
-            {
-                RenderTanks();
-                Render.DisplayMessage("NO CHECKPOINT FOUND!");
-            }
-            
-        }
-
     }
 }

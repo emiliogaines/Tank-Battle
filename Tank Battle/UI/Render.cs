@@ -259,6 +259,12 @@ namespace Tank_Battle.UI
             }
         }
 
+        public static void RenderTanks(Tank AllyTank, Tank EnemyTank)
+        {
+            Render.DrawTank(TankFacingDirection.EAST, AllyTank);
+            Render.DrawTank(TankFacingDirection.WEST, EnemyTank);
+        }
+
         private static string[] GetTank(TankFacingDirection direction)
         {
             if (direction == TankFacingDirection.EAST)
