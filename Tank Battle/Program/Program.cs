@@ -1,6 +1,7 @@
 ﻿using System;
 using Tank_Battle.UI;
 using Tank_Battle.Object;
+using Tank_Battle.Observable;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,9 +20,20 @@ namespace Tank_Battle
             Driver EnemyDriver = new Driver("Klaus");
 
             //Init tanks
-            AllyTank = new Tank();
-            EnemyTank = new Tank();
+            AllyTank = new Tank(TankFacingDirection.EAST);
+            EnemyTank = new Tank(TankFacingDirection.WEST);
             EnemyTank.BaseFirepower = 3;
+
+            //Creates main observable
+            var TankObservable = new Observable<Tank>();
+
+            //Creates observer for each tank
+            var AllyTankObserver = new TankHealthObserver();
+            var EnemyTankObserver = new TankHealthObserver();
+
+            //Register Tanks to re-draw themselves when they are updated, eg. taking damage
+            TankObservable.Register(AllyTankObserver);
+            TankObservable.Register(EnemyTankObserver);
 
             //Enter tanks
             AllyTank.EnterTank(AllyDriver);
@@ -33,7 +45,7 @@ namespace Tank_Battle
             //Draw our border and title
             Render.DrawBorder("TANK BATTLE");
 
-            //Draw our tanks
+            //Draw our tanks, only for the first time
             Render.RenderTanks(AllyTank, EnemyTank);
 
             //Create and display options that the user can click on
@@ -48,12 +60,8 @@ namespace Tank_Battle
 
             while (EnemyTank.Health > 0 && AllyTank.Health > 0)
             {
-                //Draw our tanks
-                Render.RenderTanks(AllyTank, EnemyTank);
-
                 //Wait for user to select an option
                 Render.DrawOptions(Options, TankChoice);
-
             }
 
             Render.Reset();

@@ -7,12 +7,17 @@ namespace Tank_Battle.Object
     public class Tank
     {
         public Driver Driver;
+        public TankFacingDirection TankDirection;
         public int Health = 10;
         public int Firepower = 1;
         public int BaseFirepower = 1;
 
         public int MaxHealth = 10;
 
+        public Tank(TankFacingDirection TankDirection)
+        {
+            this.TankDirection = TankDirection;
+        }
         public void EnterTank(Driver Driver)
         {
             this.Driver = Driver;

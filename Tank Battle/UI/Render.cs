@@ -223,21 +223,21 @@ namespace Tank_Battle.UI
             }
         }
 
-        public static void DrawTank(TankFacingDirection Direction, Tank Tank)
+        public static void DrawTank(Tank Tank)
         {
             int YLevel = 5;
             int YLevelTank = 5;
-            int XLevel = (Direction == TankFacingDirection.EAST) ? 3 : ConsoleWidth - 18; //Align Tank '3' from edge
-            int XHealthLevel = (Direction == TankFacingDirection.EAST) ? 3 : ConsoleWidth - 15;
-            int XTextLevel = (Direction == TankFacingDirection.EAST) ? 3 : ConsoleWidth - 3 - (Tank.Driver.Name.Length);
+            int XLevel = (Tank.TankDirection == TankFacingDirection.EAST) ? 3 : ConsoleWidth - 18; //Align Tank '3' from edge
+            int XHealthLevel = (Tank.TankDirection == TankFacingDirection.EAST) ? 3 : ConsoleWidth - 15;
+            int XTextLevel = (Tank.TankDirection == TankFacingDirection.EAST) ? 3 : ConsoleWidth - 3 - (Tank.Driver.Name.Length);
 
 
-            string[] TankStringArray = GetTank(Direction);
+            string[] TankStringArray = GetTank(Tank.TankDirection);
             if (Tank.Health == 0)
             {
                 TankStringArray = GetDestroyedTank();
                 YLevelTank = YLevelTank - 1;
-                XLevel = (Direction == TankFacingDirection.EAST) ? 1 : ConsoleWidth - 19;
+                XLevel = (Tank.TankDirection == TankFacingDirection.EAST) ? 1 : ConsoleWidth - 19;
             }
 
             Console.SetCursorPosition(XTextLevel, YLevel - 2);
@@ -258,8 +258,8 @@ namespace Tank_Battle.UI
 
         public static void RenderTanks(Tank AllyTank, Tank EnemyTank)
         {
-            Render.DrawTank(TankFacingDirection.EAST, AllyTank);
-            Render.DrawTank(TankFacingDirection.WEST, EnemyTank);
+            Render.DrawTank(AllyTank);
+            Render.DrawTank(EnemyTank);
         }
 
         private static string[] GetTank(TankFacingDirection direction)
