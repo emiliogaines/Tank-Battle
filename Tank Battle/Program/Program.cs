@@ -49,8 +49,7 @@ namespace Tank_Battle
             while (EnemyTank.Health > 0 && AllyTank.Health > 0)
             {
                 //Draw our tanks
-                Render.DrawTank(TankFacingDirection.EAST, AllyTank);
-                Render.DrawTank(TankFacingDirection.WEST, EnemyTank);
+                Render.RenderTanks(AllyTank, EnemyTank);
 
                 //Wait for user to select an option
                 Render.DrawOptions(Options, TankChoice);
@@ -59,8 +58,7 @@ namespace Tank_Battle
 
             Render.Reset();
             Render.DrawBorder("GAME OVER");
-            Render.DrawTank(TankFacingDirection.EAST, AllyTank);
-            Render.DrawTank(TankFacingDirection.WEST, EnemyTank);
+            Render.RenderTanks(AllyTank, EnemyTank);
 
             if (AllyTank.Health > 0)
             {

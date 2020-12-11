@@ -20,9 +20,6 @@ namespace Tank_Battle.UI
             Console.WindowWidth = Math.Clamp(ConsoleWidth, 0, Console.LargestWindowWidth);
             Console.WindowHeight = Math.Clamp(ConsoleHeight, 0, Console.LargestWindowHeight);
 
-
-
-
             Console.CursorVisible = false;
             Console.BackgroundColor = ConsoleColor.Yellow;
             Console.ForegroundColor = ConsoleColor.Black;
